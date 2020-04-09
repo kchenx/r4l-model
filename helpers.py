@@ -31,30 +31,31 @@ def logistic_growth(A, K, r, t):
 def cost(costs, start_n, max_n, r, t):
     n = start_n
     # [[suppliers], [plants], [warehouses], [transportation]]
-    data = [[], [], [], []]
+    data = np.zeros([4, t])
     for i in range(t):
         # Increase output using logistic growth (does nothing for i = 0)
         n = logistic_growth(start_n, max_n, r, i)
-        
+
         # Calculate cost by segment per week and add to data
-        data[0].append(segment_cost(costs["suppliers"], n))
-        data[1].append(segment_cost(costs["plants"], n))
-        data[2].append(segment_cost(costs["warehouses"], n))
+        data[0][i] = segment_cost(costs["suppliers"], n)
+        data[1][i] = segment_cost(costs["plants"], n)
+        data[2][i] = segment_cost(costs["warehouses"], n)
         trcosts = costs["transportation"]
-        data[3].append(n * trcosts["freightRate"] * trcosts["tripDistance"] * 
-                                      trcosts["unitVolume"] / trcosts["freightVolume"])
+        data[3][i] = n * trcosts["freightRate"] * trcosts["tripDistance"] * \
+                                 trcosts["unitVolume"] / trcosts["freightVolume"]
+
+    fig, axs = plt.subplots(2,1)
 
     # Divide data through by `multiple`
     multiple = 1000
-    npdata = np.array(data) / multiple
-    segments = ["Suppliers", "Plants", "Warehouses", "Transportation"]
-    suppliers = npdata[0]
-    plants = npdata[1]
-    warehouses = npdata[2]
-    transportation = npdata[3]
-    ind = [t for t in range(1, t+1)]
+    reduced_data = data / multiple
 
-    fig, axs = plt.subplots(2,1)
+    # Prepare for graph plotting
+    suppliers = reduced_data[0]
+    plants = reduced_data[1]
+    warehouses = reduced_data[2]
+    transportation = reduced_data[3]
+    ind = [t for t in range(1, t+1)]
 
     # Plot graph
     graph = axs[0]
@@ -70,14 +71,20 @@ def cost(costs, start_n, max_n, r, t):
     graph.legend(loc="lower right")
     graph.set_title("Projected Cost per Week")
 
-    # Add sums to data
-    npdata = npdata.tolist()
-    npdata = np.append(npdata,[np.sum(npdata, axis=0)], axis=0)
-    col = np.array([np.sum(npdata, axis=1)])
-    npdata = np.concatenate((npdata,col.T), axis=1)
-    formatted_data = [['{:,.0f}'.format(j) for j in i] for i in npdata]
+    # Add sums to original data
+    data = np.append(data,[np.sum(data, axis=0)], axis=0)
+    col = np.array([np.sum(data, axis=1)])
+    data = np.concatenate((data,col.T), axis=1)
+    formatted_data = [['{:,.0f}'.format(j) for j in i] for i in data]
 
-    # Plot table
+    # Print data to console
+    for i in range(t):
+        print("Week {}: ${}".format(i+1, formatted_data[4][i]))
+    print("GRAND TOTAL: ${}".format(formatted_data[4][t]))
+
+    segments = ["Suppliers", "Plants", "Warehouses", "Transportation"]
+
+    # Print table
     axs[1].axis("tight")
     axs[1].axis("off")
     rows = segments

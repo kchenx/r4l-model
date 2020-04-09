@@ -1,4 +1,4 @@
-from helpers import logistic_growth, segment_cost, cost
+from helpers import cost
 
 # in numbers of ventilators produced per week
 starting_output = 6000
