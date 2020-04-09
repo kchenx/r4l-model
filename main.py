@@ -34,8 +34,8 @@ weekly_costs = {
         },
         "fixed": {
             # fixed costs per week
-            "factory": 1000,
-            "machinery": 500,
+            "factory": 2000,
+            "machinery": 1000,
         },
         "labor": {
             "wage": 35,
@@ -55,9 +55,9 @@ weekly_costs = {
     },
 
     "transportation": {
-        "freightRate": 35,              # dollars per mile
+        "freightRate": 4,               # dollars per mile
         "tripDistance": 1000,           # miles
-        "unitVolume": 6,                # cubic feet
+        "unitVolume": 8,                # cubic feet
         "freightVolume": 3000,          # cubic feet
         "labor": {
             # freight rate already includes labor cost
