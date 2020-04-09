@@ -9,6 +9,7 @@ Modify model assumptions in `main.py` and run using `python3 main.py`. A plot of
 
 ## Files
 
-|----------------|----------------------|
-|main.py         | Program to be run	|
-|helpers.py      | Computes cost		|
+| File			  | Function			 |
+|-----------------|----------------------|
+| main.py         | Program to be run	 |
+| helpers.py      | Computes cost		 |
